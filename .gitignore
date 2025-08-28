@@ -1,0 +1,39 @@
+# Node.js 관련
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# 운영체제 관련
+.DS_Store  # macOS에서 생성되는 파일
+Thumbs.db  # Windows에서 생성되는 파일
+
+# 빌드 결과물
+/dist/
+build/
+
+# 환경 설정 파일
+.env
+
+# IDE 관련 파일
+.idea/
+.vscode/
+
+# 테스트 커버리지 결과물
+coverage/
+
+# 임시 파일
+*.log
+*.tmp
+
+# Next.js나 기타 프레임워크 관련 임시 파일
+/.next/
+/out/
+
+# TypeScript 빌드 파일
+*.tsbuildinfo
+
+# 기타 시스템/개발 도구에서 생성하는 파일
+*.swp  # vim 등의 편집기에서 생성되는 임시 파일
+*.swo  # vim 등의 편집기에서 생성되는 임시 파일

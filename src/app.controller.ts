@@ -1,5 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { CreateVideoDto } from './res/video/video.dto';
+import { VideoService } from './res/video/video.service';
 
 @Controller()
 export class AppController {
