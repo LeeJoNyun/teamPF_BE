@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { VideoService } from './video.service';
-import { CreateVideoDto } from './video.dto';
+import { CreateVideoDto } from './dto/video.dto';
 
 @Controller('video')
 export class VideoController {
@@ -9,6 +9,11 @@ export class VideoController {
   @Get('/')
   async findAll() {
     return this.videoService.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.videoService.findAllByGroupId(id);
   }
 
   @Post('/')

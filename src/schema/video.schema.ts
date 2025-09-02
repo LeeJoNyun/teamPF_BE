@@ -5,8 +5,8 @@ export type VideoDocument = HydratedDocument<Video>;
 
 @Schema({ collection: 'video' })
 export class Video {
-  @Prop()
-  id: string;
+  // @Prop()
+  // _id: string;
   @Prop()
   no: number;
   @Prop()
@@ -17,6 +17,9 @@ export class Video {
   season: string;
   @Prop()
   youtubeId: string;
+
+  @Prop()
+  groupId: string;
 }
 
 export const VideoSchema = SchemaFactory.createForClass(Video);

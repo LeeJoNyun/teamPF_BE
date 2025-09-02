@@ -16,6 +16,9 @@ export class CreateVideoDto {
   @IsString()
   group: string;
 
+  // @IsString()
+  // groupId: string;
+
   @IsString()
   season: string;
 
