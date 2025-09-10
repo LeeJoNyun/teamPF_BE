@@ -7,11 +7,15 @@ import { VideoService } from './res/video/video.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
+import { SnsModule } from './res/sns/sns.module';
+import { UserModule } from './res/user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [appConfig] }),
     VideoModule,
+    SnsModule,
+    UserModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
