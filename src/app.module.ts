@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { SnsModule } from './res/sns/sns.module';
 import { UserModule } from './res/user/user.module';
+import { LoginModule } from './res/login/login.module';
 
 @Module({
   imports: [
@@ -24,8 +25,8 @@ import { UserModule } from './res/user/user.module';
         dbName: configService.get<string>('MONGO_DB'),
       }),
     }),
-
     VideoModule,
+    LoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],
