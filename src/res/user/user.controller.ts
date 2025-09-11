@@ -14,7 +14,7 @@ export class UserController {
       dto.password,
       dto.phone,
       dto.birth,
-      dto.gender,
+      // dto.gender,
     );
   }
 }

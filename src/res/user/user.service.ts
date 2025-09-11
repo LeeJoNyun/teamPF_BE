@@ -14,7 +14,7 @@ export class UserService {
     password: string,
     phone: string,
     birth: string,
-    gender: string,
+    // gender: string,
   ) {
     await new this.userModel({
       name,
@@ -22,7 +22,7 @@ export class UserService {
       password,
       phone,
       birth,
-      gender,
+      // gender,
       isDel: false,
       regDate: new Date(),
     }).save();
