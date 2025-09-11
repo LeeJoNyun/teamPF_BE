@@ -51,6 +51,6 @@ export class UserService {
     if (!user) {
       return { error: 0, message: 'success' };
     }
-    return { error: -1, message: 'exist email' };
+    return { error: -1, message: 'exist email', user: user };
   }
 }
