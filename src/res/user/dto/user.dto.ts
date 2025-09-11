@@ -16,6 +16,6 @@ export class UserDto {
   @IsString()
   birth: string;
 
-  @IsString()
-  gender: string;
+  // @IsString()
+  // gender: string;
 }

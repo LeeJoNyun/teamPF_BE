@@ -18,7 +18,7 @@ export class LoginService {
     }
     const user = await this.userModel
       .findOne({ email, password })
-      .select('name email phone birth gender')
+      .select('name email phone birth')
       .lean();
 
     if (!user) {

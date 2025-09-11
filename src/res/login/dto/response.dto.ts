@@ -3,5 +3,5 @@ export class UserResponseDto {
   email: string;
   phone: string;
   birth: string;
-  gender: string;
+  // gender: string;
 }

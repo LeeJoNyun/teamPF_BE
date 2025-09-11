@@ -20,8 +20,8 @@ export class User {
   @Prop()
   birth: string;
 
-  @Prop()
-  gender: string;
+  // @Prop()
+  // gender: string;
 
   @Prop()
   isDel: string;
