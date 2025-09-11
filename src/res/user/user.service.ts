@@ -32,7 +32,7 @@ export class UserService {
 
   // 회원 전체 조회
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return await this.userModel.find().exec();
   }
 
   // 회원 정보 수정
@@ -40,7 +40,7 @@ export class UserService {
     id: string,
     updateData: Partial<User>,
   ): Promise<User | null> {
-    return this.userModel
+    return await this.userModel
       .findByIdAndUpdate(id, updateData, { new: true })
       .exec();
   }
