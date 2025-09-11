@@ -14,7 +14,7 @@ Thumbs.db  # Windows에서 생성되는 파일
 build/
 
 # 환경 설정 파일
-.env
+# .env
 
 # IDE 관련 파일
 .idea/
