@@ -26,6 +26,8 @@ export class UserService {
       isDel: false,
       regDate: new Date(),
     }).save();
+
+    return { error: 0, message: '' };
   }
 
   // 회원 전체 조회
@@ -41,5 +43,14 @@ export class UserService {
     return this.userModel
       .findByIdAndUpdate(id, updateData, { new: true })
       .exec();
+  }
+
+  // 중복검사
+  async findOne(email: string) {
+    const user = this.userModel.findOne({ email }).exec();
+    if (!user) {
+      return { error: 0, message: 'success' };
+    }
+    return { error: -1, message: 'exist email' };
   }
 }
