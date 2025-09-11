@@ -47,10 +47,10 @@ export class UserService {
 
   // 중복검사
   async findOne(email: string) {
-    const user = this.userModel.findOne({ email }).exec();
-    if (!user) {
-      return { error: 0, message: 'success' };
+    const user = await this.userModel.findOne({ email: email }).exec();
+    if (user) {
+      return { error: -1, message: 'exist email', user: user };
     }
-    return { error: -1, message: 'exist email', user: user };
+    return { error: 0, message: 'success' };
   }
 }
