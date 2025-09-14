@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 import { Sns, SnsDocument } from 'src/schema/sns.schema';
 import { User, UserDocument } from 'src/schema/user.schema';
 import { UserResponseDto } from '../login/dto/response.dto';
+import { GoogleResponseDto } from './dto/google.dto';
 
 @Injectable()
 export class SnsService {
@@ -59,9 +60,11 @@ export class SnsService {
           timeout: 7000,
         },
       );
+
       token = data;
     } catch (e: any) {
       const g = e?.response?.data;
+
       throw new BadRequestException(
         `${g?.error || 'token_error'}: ${g?.error_description || 'unknown'}`,
       );
@@ -97,13 +100,37 @@ export class SnsService {
         .select('name email phone birth')
         .lean();
     }
-
+    user = { ...user, profile: googleUser.picture };
     // 4) 프론트에서 판단할 수 있도록 반환 형식 통일
     return {
       provider: 'google',
       snsEmail: email,
       // 이미 연동되어 있으면 유저 정보, 아니면 null
-      user: (user as UserResponseDto) || null,
+      user: (user as GoogleResponseDto) || null,
+      // 프론트가 바로 쓰기 좋게 flag도 포함
+      isLinked: Boolean(user),
+    };
+  }
+
+  async exchangeKakaoCode(type: string, email: string) {
+    const link = await this.snsModel
+      .findOne({ type, snsEmail: email })
+      .lean<{ userId?: string | null }>();
+
+    let user: any = null;
+    if (link?.userId) {
+      user = await this.userModel
+        .findById(link.userId)
+        .select('name email phone birth')
+        .lean();
+    }
+
+    // 4) 프론트에서 판단할 수 있도록 반환 형식 통일
+    return {
+      provider: 'kakao',
+      snsEmail: email,
+      // 이미 연동되어 있으면 유저 정보, 아니면 null
+      user: (user as GoogleResponseDto) || null,
       // 프론트가 바로 쓰기 좋게 flag도 포함
       isLinked: Boolean(user),
     };
