@@ -1,62 +1,58 @@
-import { VideoGroupService } from './../video-group/video-group.service';
-import { Injectable } from '@nestjs/common';
+// src/video/video.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Video, VideoDocument } from 'src/schema/video.schema';
-import { VideoGroup } from 'src/schema/videoGroup.schema';
+
+import { CreateVideoDto, UpdateVideoDto } from './dto/video.dto';
+import { Video } from 'src/schema/video.schema';
 
 @Injectable()
 export class VideoService {
-  constructor(
-    @InjectModel(Video.name) private videoModel: Model<VideoDocument>,
-    private videoGroupService: VideoGroupService,
-  ) {}
+  constructor(@InjectModel(Video.name) private readonly videoModel: Model<Video>) {}
 
-  async createMany(
-    group: string,
-    season: string,
-    videos: { no: number; title: string; youtubeId: string }[],
+  findAll() {
+    return this.videoModel.find().sort({ createdAt: -1 }).lean();
+  }
+
+  findAllByGroupId(group: string) {
+    return this.videoModel.find({ group }).sort({ season: 1, createdAt: -1 }).lean();
+  }
+
+  async findOne(id: string) {
+    const doc = await this.videoModel.findById({id}).lean();
+    if (!doc) throw new NotFoundException('Video not found');
+    return doc;
+  }
+
+  // ⬇️ URL 문자열만 받아 저장 (파일 객체 금지)
+  async createOne(
+    dto: CreateVideoDto & { runtimeMin?: number },
+    files?: { visualUrl?: string; thumbUrl?: string },
   ) {
-    const createdVideos: Video[] = [];
+    const doc: any = { ...dto };
 
-    // 넘겨받은 group, season 으로 videoGroup 찾기
-    let groupEntity = await this.videoGroupService.findOne(group, season);
-    if (!groupEntity) {
-      await this.videoGroupService.addGroup(group, season);
-      groupEntity = await this.videoGroupService.findOne(group, season);
-    }
+    if (files?.visualUrl) doc.visual = files.visualUrl;
+    if (files?.thumbUrl)  doc.thumb  = files.thumbUrl;
 
-    // ✅ _id를 문자열로 변환하여 저장합니다.
-    const groupIdAsString = groupEntity?._id.toString();
+    if (doc.runtimeMin != null) doc.runtimeMin = Number(doc.runtimeMin);
 
-    // 기존 groupId와 동일한 영상 지우기
-    await this.videoModel.deleteMany({ groupId: groupIdAsString });
-
-    for (const v of videos) {
-      const newVideo = new this.videoModel({
-        group,
-        groupId: groupIdAsString,
-        season,
-        no: Number(v.no),
-        title: v.title,
-        youtubeId: v.youtubeId,
-      });
-      const saved = await newVideo.save();
-      createdVideos.push(saved);
-    }
-
-    return createdVideos;
+    return this.videoModel.create(doc);
   }
 
-  async findAll(): Promise<Video[]> {
-    return this.videoModel.find().exec();
+  async updateOne(id: string, dto: UpdateVideoDto, files?: { visualUrl?: string; thumbUrl?: string }) {
+    const update: any = { ...dto };
+    if (files?.visualUrl) update.visual = files.visualUrl;
+    if (files?.thumbUrl)  update.thumb  = files.thumbUrl;
+    if (update.runtimeMin != null) update.runtimeMin = Number(update.runtimeMin);
+
+    const doc = await this.videoModel.findByIdAndUpdate(id, update, { new: true }).lean();
+    if (!doc) throw new NotFoundException('Video not found');
+    return doc;
   }
 
-  async findAllByGroupId(id: string): Promise<Video[]> {
-    return this.videoModel.find({ groupId: id }).exec();
-  }
-
-  async delete(id: string): Promise<any> {
-    return this.videoModel.deleteOne({ id }).exec();
+  async removeOne(id: string) {
+    const doc = await this.videoModel.findByIdAndDelete(id).lean();
+    if (!doc) throw new NotFoundException('Video not found');
+    return { ok: true, id };
   }
 }

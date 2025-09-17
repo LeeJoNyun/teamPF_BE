@@ -1,5 +1,5 @@
 import { UserDto } from './dto/user.dto';
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { DuplicateDto } from './dto/duplicate.dto';
 
@@ -22,5 +22,10 @@ export class UserController {
   @Post('/duplicate')
   async findOne(@Body() dto: DuplicateDto) {
     return this.userService.findOne(dto.email);
+  }
+
+  @Get()
+  async userList(){
+    return this.userService.findAll();
   }
 }

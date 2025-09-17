@@ -10,6 +10,7 @@ import appConfig from './config/app.config';
 import { SnsModule } from './res/sns/sns.module';
 import { UserModule } from './res/user/user.module';
 import { LoginModule } from './res/login/login.module';
+import { AdminModule } from './res/admin/admin.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { LoginModule } from './res/login/login.module';
     }),
     VideoModule,
     LoginModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
