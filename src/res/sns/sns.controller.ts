@@ -10,7 +10,11 @@ export class SnsController {
 
   @Post('google')
   async exchangeGoogle(@Body() dto: GoogleDto) {
-    return this.snsService.exchangeGoogleCode(dto.code, dto.code_verifier);
+    return this.snsService.exchangeGoogleCode(
+      dto.code,
+      dto.code_verifier,
+      dto.type,
+    );
   }
   @Post('kakao')
   async exchangeKakao(@Body() dto: KakaoDto) {

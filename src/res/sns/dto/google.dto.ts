@@ -6,6 +6,9 @@ export class GoogleDto {
 
   @IsString()
   code_verifier: string;
+
+  @IsString()
+  type: string;
 }
 
 export class GoogleResponseDto {

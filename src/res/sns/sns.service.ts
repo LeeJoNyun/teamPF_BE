@@ -10,6 +10,7 @@ import { Sns, SnsDocument } from 'src/schema/sns.schema';
 import { User, UserDocument } from 'src/schema/user.schema';
 import { UserResponseDto } from '../login/dto/response.dto';
 import { GoogleResponseDto } from './dto/google.dto';
+import { of } from 'rxjs';
 
 @Injectable()
 export class SnsService {
@@ -36,7 +37,11 @@ export class SnsService {
    * userId가 있으면 users에서 상세를 읽어 반환한다.
    * userId 없으면 user: null 로 반환하여 프론트가 회원가입 판단.
    */
-  async exchangeGoogleCode(code: string, code_verifier?: string) {
+  async exchangeGoogleCode(
+    code: string,
+    code_verifier?: string,
+    type?: string,
+  ) {
     // 1) 토큰 교환
     const p = new URLSearchParams();
     p.set('code', code); // 브라우저가 이미 디코딩된 "4/..." 형태를 줌
@@ -85,29 +90,40 @@ export class SnsService {
 
     const email = googleUser?.email;
     if (!email) throw new BadRequestException('google_email_missing');
-
-    // 3) SNS 테이블에서 "조회만"
-    const link = await this.snsModel
-      .findOne({ type: 'google', snsEmail: email })
-      .lean<{ userId?: string | null }>();
-
     let user: any = null;
-    if (link?.userId) {
-      user = await this.userModel
-        .findById(link.userId)
-        .select('name email phone birth')
-        .lean();
+    if (type === 'login') {
+      // 3) SNS 테이블에서 "조회만"
+      const link = await this.snsModel
+        .findOne({ type: 'google', snsEmail: email })
+        .lean<{ userId?: string | null }>();
+
+      if (link?.userId) {
+        user = await this.userModel
+          .findById(link.userId)
+          .select('name email phone birth')
+          .lean();
+      }
+      user = { ...user, profile: googleUser.picture };
+      // 4) 프론트에서 판단할 수 있도록 반환 형식 통일
+      return {
+        provider: 'google',
+        snsEmail: email,
+        // 이미 연동되어 있으면 유저 정보, 아니면 null
+        user: (user as GoogleResponseDto) || null,
+        // 프론트가 바로 쓰기 좋게 flag도 포함
+        isLinked: Boolean(user),
+      };
+    } else if (type === 'register') {
+      try {
+        await this.snsModel.findOneAndUpdate(
+          { type, snsEmail: email, userId },
+          { $set: { type, snsEmail: email, userId } },
+          { upsert: true, new: true },
+        );
+      } catch {
+        throw new BadRequestException('register error');
+      }
     }
-    user = { ...user, profile: googleUser.picture };
-    // 4) 프론트에서 판단할 수 있도록 반환 형식 통일
-    return {
-      provider: 'google',
-      snsEmail: email,
-      // 이미 연동되어 있으면 유저 정보, 아니면 null
-      user: (user as GoogleResponseDto) || null,
-      // 프론트가 바로 쓰기 좋게 flag도 포함
-      isLinked: Boolean(user),
-    };
   }
 
   async exchangeKakaoCode(type: string, email: string) {
