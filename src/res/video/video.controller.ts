@@ -1,6 +1,14 @@
 // src/video/video.controller.ts
 import {
-  Body, Controller, Delete, Get, Param, Patch, Post, UploadedFiles, UseInterceptors
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
@@ -43,9 +51,8 @@ export class VideoController {
 
   // 기존 호환: 그룹별
   @Get(':id')
-  async findByGroup(@Param('id') id: string) {
-
-    return this.videoService.findAllByGroupId(id);
+  async findOne(@Param('id') id: string) {
+    return this.videoService.findOne(id);
   }
 
   /** 🔵 단건 생성 + 이미지 업로드(visual, thumb) */
@@ -54,7 +61,7 @@ export class VideoController {
     FileFieldsInterceptor(
       [
         { name: 'visual', maxCount: 1 },
-        { name: 'thumb',  maxCount: 1 },
+        { name: 'thumb', maxCount: 1 },
       ],
       multerOptions, // ✅ POST에도 저장소 설정
     ),
@@ -65,8 +72,12 @@ export class VideoController {
     files: { visual?: Express.Multer.File[]; thumb?: Express.Multer.File[] },
   ) {
     // 파일이 있으면 정적 URL 생성 (/video/** 로 서빙)
-    const visualUrl = files.visual?.[0] ? `/video/${files.visual[0].filename}` : undefined;
-    const thumbUrl  = files.thumb?.[0]  ? `/video/${files.thumb[0].filename}`  : undefined;
+    const visualUrl = files.visual?.[0]
+      ? `/video/${files.visual[0].filename}`
+      : undefined;
+    const thumbUrl = files.thumb?.[0]
+      ? `/video/${files.thumb[0].filename}`
+      : undefined;
 
     // DTO가 runtime 라는 이름이면 스키마의 runtimeMin으로 매핑
     const payload: any = { ...dto };
@@ -84,7 +95,7 @@ export class VideoController {
     FileFieldsInterceptor(
       [
         { name: 'visual', maxCount: 1 },
-        { name: 'thumb',  maxCount: 1 },
+        { name: 'thumb', maxCount: 1 },
       ],
       multerOptions,
     ),
@@ -95,8 +106,12 @@ export class VideoController {
     @UploadedFiles()
     files: { visual?: Express.Multer.File[]; thumb?: Express.Multer.File[] },
   ) {
-    const visualUrl = files.visual?.[0] ? `/video/${files.visual[0].filename}` : undefined;
-    const thumbUrl  = files.thumb?.[0]  ? `/video/${files.thumb[0].filename}`  : undefined;
+    const visualUrl = files.visual?.[0]
+      ? `/video/${files.visual[0].filename}`
+      : undefined;
+    const thumbUrl = files.thumb?.[0]
+      ? `/video/${files.thumb[0].filename}`
+      : undefined;
     return this.videoService.updateOne(id, dto, { visualUrl, thumbUrl });
   }
 
