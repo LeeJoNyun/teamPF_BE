@@ -37,14 +37,12 @@ export class SnsService {
    * userId 없으면 user: null 로 반환하여 프론트가 회원가입 판단.
    */
   async exchangeGoogleCode(code: string, code_verifier?: string) {
-    const redirectUri = `${process.env.FRONT_ORIGIN!.replace(/\/$/, '')}/authcallback`;
-
     // 1) 토큰 교환
     const p = new URLSearchParams();
     p.set('code', code); // 브라우저가 이미 디코딩된 "4/..." 형태를 줌
     p.set('client_id', process.env.GOOGLE_CLIENT_ID!);
     p.set('client_secret', process.env.GOOGLE_CLIENT_SECRET!);
-    p.set('redirect_uri', redirectUri);
+    p.set('redirect_uri', process.env.FRONT_ORIGIN!);
     p.set('grant_type', 'authorization_code');
     if (code_verifier) p.set('code_verifier', code_verifier); // PKCE
 
