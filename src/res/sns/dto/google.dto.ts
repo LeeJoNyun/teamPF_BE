@@ -6,9 +6,6 @@ export class GoogleDto {
 
   @IsString()
   code_verifier: string;
-
-  @IsString()
-  type: string;
 }
 
 export class GoogleResponseDto {
@@ -17,4 +14,15 @@ export class GoogleResponseDto {
   phone: string;
   birth: string;
   picture: string;
+}
+
+export class GoogleRegisterDto {
+  @IsString()
+  code: string;
+
+  @IsString()
+  code_verifier: string;
+
+  @IsString()
+  userId: string;
 }

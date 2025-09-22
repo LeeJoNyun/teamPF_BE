@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { SnsService } from './sns.service';
-import { GoogleDto } from './dto/google.dto';
+import { GoogleDto, GoogleRegisterDto } from './dto/google.dto';
 import { RegisterDto } from './dto/register.dto';
-import { KakaoDto } from './dto/kakao.dto';
+import { KakaoDto, KakaoRegisterDto } from './dto/kakao.dto';
 
 @Controller('sns')
 export class SnsController {
@@ -10,11 +10,7 @@ export class SnsController {
 
   @Post('google')
   async exchangeGoogle(@Body() dto: GoogleDto) {
-    return this.snsService.exchangeGoogleCode(
-      dto.code,
-      dto.code_verifier,
-      dto.type,
-    );
+    return this.snsService.exchangeGoogleCode(dto.code, dto.code_verifier);
   }
   @Post('kakao')
   async exchangeKakao(@Body() dto: KakaoDto) {
@@ -29,5 +25,19 @@ export class SnsController {
   @Get('user/:userId')
   async linksByUser(@Param('userId') userId: string) {
     return this.snsService.getLinksByUser(userId);
+  }
+
+  @Post('googleRegister')
+  async registerGoogleEmail(@Body() dto: GoogleRegisterDto) {
+    return this.snsService.registerGoogleEmail(
+      dto.code,
+      dto.code_verifier,
+      dto.userId,
+    );
+  }
+
+  @Post('kakaoRegister')
+  async registerKakaoEmail(@Body() dto: KakaoRegisterDto) {
+    return this.snsService.registerKakaoEmail(dto.email, dto.userId);
   }
 }

@@ -8,3 +8,10 @@ export class KakaoDto {
   @IsIn(['google', 'kakao', 'naver'])
   type: string;
 }
+export class KakaoRegisterDto {
+  @IsString()
+  email: string;
+
+  @IsString()
+  userId: string;
+}
