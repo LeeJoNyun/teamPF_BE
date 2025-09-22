@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { User, UserDocument } from 'src/schema/user.schema';
 
 @Injectable()
@@ -54,5 +58,16 @@ export class UserService {
     return { error: 0, message: 'success' };
   }
 
-  
+  async findById(id: string) {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('Invalid user id');
+    }
+    const doc = await this.userModel
+      .findById(id)
+      .select('-password')
+      .lean()
+      .exec();
+    if (!doc) throw new NotFoundException('User not found');
+    return doc;
+  }
 }

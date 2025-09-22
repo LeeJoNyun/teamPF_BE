@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import axios from 'axios';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { Sns, SnsDocument } from 'src/schema/sns.schema';
 import { User, UserDocument } from 'src/schema/user.schema';
 import { UserResponseDto } from '../login/dto/response.dto';
@@ -134,5 +134,23 @@ export class SnsService {
       // 프론트가 바로 쓰기 좋게 flag도 포함
       isLinked: Boolean(user),
     };
+  }
+
+  async getLinksByUser(userId: string) {
+    if (!isValidObjectId(userId)) {
+      throw new BadRequestException('invalid user id');
+    }
+
+    const docs = await this.snsModel
+      .find({ userId })
+      .select('type snsEmail createdAt updatedAt')
+      .lean()
+      .exec();
+
+    // 프론트에서 바로 쓰기 좋게 가공
+    return docs.map((d) => ({
+      provider: d.type, // 'google' | 'kakao' …
+      snsEmail: d.snsEmail,
+    }));
   }
 }

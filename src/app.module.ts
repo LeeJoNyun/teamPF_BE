@@ -11,6 +11,9 @@ import { SnsModule } from './res/sns/sns.module';
 import { UserModule } from './res/user/user.module';
 import { LoginModule } from './res/login/login.module';
 import { AdminModule } from './res/admin/admin.module';
+import { ReservationModule } from './res/reservation/reservation.module';
+import { CouponModule } from './res/coupon/coupon.module';
+import { UserCouponModule } from './res/user-coupon/user-coupon.module';
 
 @Module({
   imports: [
@@ -18,6 +21,7 @@ import { AdminModule } from './res/admin/admin.module';
     VideoModule,
     SnsModule,
     UserModule,
+    ReservationModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -29,6 +33,8 @@ import { AdminModule } from './res/admin/admin.module';
     VideoModule,
     LoginModule,
     AdminModule,
+    CouponModule,
+    UserCouponModule,
   ],
   controllers: [AppController],
   providers: [AppService],

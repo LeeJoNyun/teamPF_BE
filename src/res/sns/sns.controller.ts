@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { SnsService } from './sns.service';
 import { GoogleDto } from './dto/google.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -20,5 +20,10 @@ export class SnsController {
   @Post('register')
   async snsInfoRegister(@Body() dto: RegisterDto) {
     return this.snsService.snsInfoRegister(dto.type, dto.email, dto.userId);
+  }
+
+  @Get('user/:userId')
+  async linksByUser(@Param('userId') userId: string) {
+    return this.snsService.getLinksByUser(userId);
   }
 }
