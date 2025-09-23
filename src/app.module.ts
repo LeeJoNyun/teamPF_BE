@@ -15,6 +15,7 @@ import { CouponModule } from './res/coupon/coupon.module';
 import { UserCouponModule } from './res/user-coupon/user-coupon.module';
 import { PetModule } from './res/pet/pet.module';
 import { VideoHistoryModule } from './res/video-history/video-history.module';
+import { VideoLikeModule } from './res/video-like/video-like.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { VideoHistoryModule } from './res/video-history/video-history.module';
     ReplyModule,
     PetModule,
     VideoHistoryModule,
+    VideoLikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
