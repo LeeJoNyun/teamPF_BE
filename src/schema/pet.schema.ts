@@ -15,8 +15,10 @@ export class Pet {
   @Prop({ type: String, default: '', trim: true }) birthMonth: string;
   @Prop({ type: String, default: '미입력', trim: true }) age: string;
 
-  @Prop({ type: String, default: '', trim: true }) vaccinations: string;
-  @Prop({ type: String, default: '', trim: true }) parasites: string;
+  @Prop({ type: String, default: '', trim: true }) profileImage: string;
+
+  @Prop({ type: [String], default: [] }) vaccinations: string[]; // ← 배열로
+  @Prop({ type: [String], default: [] }) parasites: string[]; // ← 배열로
   @Prop({ type: String, default: '', trim: true }) gender: string;
   @Prop({ type: String, default: '', trim: true }) breed: string;
   @Prop({ type: String, default: '', trim: true }) weight: string;

@@ -17,6 +17,7 @@ export class PetController {
 
   @Post()
   create(@Body() dto: CreatePetDto) {
+    console.log('왔능가?');
     return this.petService.create(dto);
   }
 

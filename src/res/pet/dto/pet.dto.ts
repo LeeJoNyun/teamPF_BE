@@ -1,5 +1,13 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Prop } from '@nestjs/mongoose';
+import { Transform } from 'class-transformer';
+import {
+  IsArray,
+  IsMongoId,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreatePetDto {
   @IsMongoId()
@@ -13,8 +21,22 @@ export class CreatePetDto {
   @IsOptional() @IsString() birthMonth?: string;
   @IsOptional() @IsString() age?: string; // 미입력 시 스키마 기본값
 
-  @IsOptional() @IsString() vaccinations?: string;
-  @IsOptional() @IsString() parasites?: string;
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [String(value)] : [],
+  )
+  vaccinations?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @Transform(({ value }) =>
+    Array.isArray(value) ? value : value ? [String(value)] : [],
+  )
+  parasites?: string[];
+
   @IsOptional() @IsString() gender?: string;
   @IsOptional() @IsString() breed?: string;
   @IsOptional() @IsString() weight?: string;
@@ -22,6 +44,7 @@ export class CreatePetDto {
   @IsOptional() @IsString() hospital?: string;
   @IsOptional() @IsString() healthNote?: string;
   @IsOptional() @IsString() moreNote?: string;
+  @IsOptional() @IsString() profileImage?: string;
 }
 
 export class UpdatePetDto extends PartialType(CreatePetDto) {}
