@@ -1,24 +1,21 @@
+// dto/reply.dto.ts
 import {
   IsMongoId,
+  IsNumber,
   IsOptional,
   IsString,
-  MaxLength,
-  IsInt,
-  Min,
   Max,
+  Min,
 } from 'class-validator';
 
 export class CreateReplyDto {
-  @IsString() userId: string;
-  @IsString() videoId: string;
+  @IsMongoId() userId: string;
+  @IsMongoId() videoId: string;
+  @IsString() text: string;
+  @IsOptional() @IsNumber() @Min(0) @Max(5) star?: number;
+}
 
-  @IsString()
-  @MaxLength(2000)
-  text: string;
-
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Max(5)
-  star?: number;
+export class UpdateReplyDto {
+  @IsOptional() @IsString() text?: string;
+  @IsOptional() @IsNumber() @Min(0) @Max(5) star?: number;
 }
