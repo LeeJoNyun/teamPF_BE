@@ -13,6 +13,7 @@ import { AdminModule } from './res/admin/admin.module';
 import { ReservationModule } from './res/reservation/reservation.module';
 import { CouponModule } from './res/coupon/coupon.module';
 import { UserCouponModule } from './res/user-coupon/user-coupon.module';
+import { PetModule } from './res/pet/pet.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { UserCouponModule } from './res/user-coupon/user-coupon.module';
     CouponModule,
     UserCouponModule,
     ReplyModule,
+    PetModule,
   ],
   controllers: [AppController],
   providers: [AppService],
