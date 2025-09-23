@@ -38,7 +38,7 @@ export class SnsService {
    */
   async exchangeGoogleCode(code: string, code_verifier?: string) {
     const redirectUri = `${process.env.FRONT_ORIGIN!.replace(/\/$/, '')}/authcallback`;
-
+    console.log(`redirectUri : ${redirectUri}`);
     // 1) 토큰 교환
     const p = new URLSearchParams();
     p.set('code', code); // 브라우저가 이미 디코딩된 "4/..." 형태를 줌
@@ -93,6 +93,9 @@ export class SnsService {
       .findOne({ type: 'google', snsEmail: email })
       .lean<{ userId?: string | null }>();
 
+    if (!link) {
+      return { isLinked: false, user: null };
+    }
     let user: any = null;
     if (link?.userId) {
       user = await this.userModel
@@ -100,7 +103,9 @@ export class SnsService {
         .select('name email phone birth')
         .lean();
     }
+
     user = { ...user, profile: googleUser.picture };
+
     // 4) 프론트에서 판단할 수 있도록 반환 형식 통일
     return {
       provider: 'google',
@@ -192,6 +197,10 @@ export class SnsService {
       .findOne({ type, snsEmail: email })
       .lean<{ userId?: string | null }>();
 
+    if (!link) {
+      return { isLinked: false, user: null };
+    }
+
     let user: any = null;
     if (link?.userId) {
       user = await this.userModel
@@ -199,7 +208,6 @@ export class SnsService {
         .select('name email phone birth')
         .lean();
     }
-
     // 4) 프론트에서 판단할 수 있도록 반환 형식 통일
     return {
       provider: 'kakao',
