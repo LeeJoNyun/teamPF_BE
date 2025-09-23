@@ -14,6 +14,7 @@ import { ReservationModule } from './res/reservation/reservation.module';
 import { CouponModule } from './res/coupon/coupon.module';
 import { UserCouponModule } from './res/user-coupon/user-coupon.module';
 import { PetModule } from './res/pet/pet.module';
+import { VideoHistoryModule } from './res/video-history/video-history.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { PetModule } from './res/pet/pet.module';
     UserCouponModule,
     ReplyModule,
     PetModule,
+    VideoHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
