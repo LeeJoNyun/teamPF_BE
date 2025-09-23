@@ -1,9 +1,8 @@
+import { ReplyModule } from './res/reply/reply.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { VideoModule } from './res/video/video.module';
-import { VideoController } from './res/video/video.controller';
-import { VideoService } from './res/video/video.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
@@ -35,6 +34,7 @@ import { UserCouponModule } from './res/user-coupon/user-coupon.module';
     AdminModule,
     CouponModule,
     UserCouponModule,
+    ReplyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
