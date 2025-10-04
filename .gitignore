@@ -38,3 +38,4 @@ coverage/
 *.swp  # vim 등의 편집기에서 생성되는 임시 파일
 *.swo  # vim 등의 편집기에서 생성되는 임시 파일
 .DS_Store
+.DS_Store
